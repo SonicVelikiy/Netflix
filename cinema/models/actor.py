@@ -1,5 +1,3 @@
-import datetime
-# from .movie import Movie
 from django.db import models
 
 class Actor(models.Model):
@@ -18,6 +16,5 @@ class Actor(models.Model):
         (thriller,"Thriller"),
     )
     name = models.CharField(max_length=200,blank=True,null=True)
-    birthdate = models.DateField(default=datetime.date.today())
+    birthdate = models.DateField()
     gender = models.CharField(max_length=200,blank=False,null=False,choices=CHOIES)
-    # movie = models.ManyToManyField(Movie)
