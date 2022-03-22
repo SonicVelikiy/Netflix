@@ -1,20 +1,12 @@
 from django.db import models
 
 class Actor(models.Model):
-    action = "Action"
-    comedy = "Comedy"
-    drama = "Drama"
-    fantasy = "Fantasy"
-    romance = "Romance"
-    thriller = "Thriller"
+    male = "Male"
+    female = "Female"
     CHOIES = (
-        (action,"Action"),
-        (comedy,"Comedy"),
-        (drama,"Drama"),
-        (fantasy,"Fantasy"),
-        (romance,"Romance"),
-        (thriller,"Thriller"),
+        (male,"Male"),
+        (female,"Female"),
     )
-    name = models.CharField(max_length=200,blank=True,null=True)
+    name = models.CharField(max_length=200,blank=False,null=False)
     birthdate = models.DateField()
     gender = models.CharField(max_length=200,blank=False,null=False,choices=CHOIES)
