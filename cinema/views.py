@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -16,7 +16,7 @@ class MovieViewSet(ModelViewSet):
         movie = self.get_object()
         movie.actor.add(id)
         movie.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
         #http://127.0.0.1:8000/movies/movie_id/add_actor/actor_id/
 
     @action(detail=True, methods=["POST"], url_path='remove_actor/(?P<id>\d+)')
@@ -34,6 +34,14 @@ class MovieViewSet(ModelViewSet):
         return Response(data=serializer.data)
         # http://127.0.0.1:8000/movies/<int:id>/actors/
 
+class MovieActorAPIView(generics.ListAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+
+    def actions(self, request, *args, **kwargs):
+        movie = self.get_object()
+        serializer = ActorSerializer(movie.actor.all(), many=True)
+        return Response(serializer.data)
 
 class ActorViewSet(ModelViewSet):
     queryset = Actor.objects.all()
