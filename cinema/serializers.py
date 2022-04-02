@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 import datetime
-from .models import Movie,Actor
+from .models import Movie, Actor, Comment
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -18,3 +18,8 @@ class ActorSerializer(serializers.ModelSerializer):
         if date < val_date:
             raise ValidationError(detail="Katta bo'lishi kerak")
         return date
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ("user_id", "text", "created_date")

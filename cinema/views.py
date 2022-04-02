@@ -1,10 +1,11 @@
 from rest_framework import status, generics
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
-from .serializers import MovieSerializer,ActorSerializer
-from .models.movie import Movie,Actor
+from .serializers import MovieSerializer,ActorSerializer,CommentSerializer
+from .models import Movie,Actor,Comment
 
 
 
@@ -37,11 +38,18 @@ class MovieViewSet(ModelViewSet):
 class MovieActorAPIView(generics.ListAPIView):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
-
     def actions(self, request, *args, **kwargs):
         movie = self.get_object()
         serializer = ActorSerializer(movie.actor.all(), many=True)
         return Response(serializer.data)
+
+class CommentMovieAPIView(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return Comment.objects.filter(movie_id=self.request.movie_id)
 
 class ActorViewSet(ModelViewSet):
     queryset = Actor.objects.all()
