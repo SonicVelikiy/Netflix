@@ -3,6 +3,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from .serializers import MovieSerializer,ActorSerializer,CommentSerializer
 from .models import Movie,Actor,Comment
@@ -44,39 +45,16 @@ class MovieActorAPIView(generics.ListAPIView):
         return Response(serializer.data)
 
 class CommentMovieAPIView(generics.CreateAPIView):
-    serializer_class = CommentSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializer
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        data = Movie.objects.filter(id=self.kwargs['id'])
+        # serdata = MovieSerializer(data, many=False)
+        serializer.save(movie= data)
 
-    def get_queryset(self):
-        return Comment.objects.filter(movie_id=self.request.movie_id)
 
 class ActorViewSet(ModelViewSet):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
-
-
-
-
-
-
-
-
-
-
-# class movieAPIView(APIView):
-#     def get(self,request):
-#         movie = Movie.objects.all()
-#         serializer = MovieSerializer(movie, many=True)
-#         return Response(data=serializer.data)
-#
-#
-# class actorAPIView(APIView):
-#     def get(self,request):
-#         actor = Actor.objects.all()
-#         serializer = ActorSerializer(actor, many=True)
-#         return Response(data=serializer.data)
-#     def post(self,request):
-#         serializer = ActorSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         return Response(data=serializer.data)

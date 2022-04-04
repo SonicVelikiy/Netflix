@@ -20,6 +20,7 @@ class ActorSerializer(serializers.ModelSerializer):
         return date
 
 class CommentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Comment
-        fields = ("user_id", "text", "created_date")
+        fields = ("text", "created_date")

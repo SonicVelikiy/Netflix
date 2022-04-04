@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'netflix',
         'USER': 'postgres',
-        'PASSWORD': '123',
+        'PASSWORD': 'admin2022',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
