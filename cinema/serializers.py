@@ -14,7 +14,7 @@ class ActorSerializer(serializers.ModelSerializer):
         model = Actor
         fields = '__all__'
     def validate_birthdate(self, date):
-        val_date = datetime.date(1950,1,1)
+        val_date = datetime.date(1950, 1, 1)
         if date < val_date:
             raise ValidationError(detail="Katta bo'lishi kerak")
         return date
@@ -23,4 +23,4 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ("text", "created_date")
+        fields = ("id", "movie", "text", "created_date")

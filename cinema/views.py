@@ -39,6 +39,7 @@ class MovieViewSet(ModelViewSet):
 class MovieActorAPIView(generics.ListAPIView):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+
     def actions(self, request, *args, **kwargs):
         movie = self.get_object()
         serializer = ActorSerializer(movie.actor.all(), many=True)
@@ -48,12 +49,25 @@ class CommentMovieAPIView(generics.CreateAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     serializer_class = CommentSerializer
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        data = Movie.objects.filter(id=self.kwargs['id'])
-        # serdata = MovieSerializer(data, many=False)
-        serializer.save(movie= data)
 
+class CommentMovieListAPIView(generics.ListAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        return Comment.objects.filter(user=self.request.user)
+
+class CommentMovieDestroyAPIView(generics.DestroyAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        return Comment.objects.filter(user=self.request.user)
 
 class ActorViewSet(ModelViewSet):
     queryset = Actor.objects.all()
