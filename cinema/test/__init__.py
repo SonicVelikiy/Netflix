@@ -1,0 +1,1 @@
+from .movieviewset_test import MovieViewSetTest

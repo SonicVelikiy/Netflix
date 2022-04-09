@@ -3,6 +3,7 @@ from django.db import models
 from .actor import Actor
 
 class Movie(models.Model):
+
     action = "Action"
     comedy = "Comedy"
     drama = "Drama"

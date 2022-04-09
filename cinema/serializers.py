@@ -10,9 +10,11 @@ class MovieSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ActorSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Actor
         fields = '__all__'
+
     def validate_birthdate(self, date):
         val_date = datetime.date(1950, 1, 1)
         if date < val_date:
@@ -20,6 +22,7 @@ class ActorSerializer(serializers.ModelSerializer):
         return date
 
 class CommentSerializer(serializers.ModelSerializer):
+    movie = MovieSerializer()
 
     class Meta:
         model = Comment
